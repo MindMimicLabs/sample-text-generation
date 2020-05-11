@@ -4,7 +4,7 @@ from typeguard import typechecked
 
 class corpus:
     @typechecked
-    def __init__(self, documents:list, vocab:set, max_sentence_length:int) -> None:
+    def __init__(self, documents:list, vocab:dict, max_sentence_length:int) -> None:
         self.documents = documents
         self.vocab = vocab
         self.max_sentence_length = max_sentence_length
@@ -33,5 +33,6 @@ def load_corpus(corpus_path: str) -> corpus:
         print(f'document # {i+1}: words: {len(words_in_document)}. max sentence length: {t1}')
         vocab.update(words_in_document)
         words_in_documents.append(words_in_document)
+    vocab = dict((v, i) for i, v in enumerate(vocab))
     print(f'unique words: {len(vocab)}')
     return corpus(words_in_documents, vocab, max_sentence_length)
