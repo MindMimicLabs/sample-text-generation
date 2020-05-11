@@ -21,6 +21,9 @@ Any configuration differences have been extracted into a `.yml` file of the same
 * `~/code/load_corpus.{r|py}` supports loading a multi-document corpus.
   Please note: these functions are identical in internet, but the low-level tokenization is _slightly_ different.
   I will work out the delta when I get more time, but the difference is minor enough to still be fit for purpose.
+* `~/code/utils.{r|py}` contains helper functions around generating the samples, batching, and one-hot encoding.
+* `~/code/generate_text.{r|py}` defines the whole process for the example.
+  Load data, then creating the model, then training the model, and finally producing the sample text.
 
 ## Environment
 
