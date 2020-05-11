@@ -1,0 +1,10 @@
+# R/R Studio
+.Rhistory
+.RData
+
+# Python/VS Code
+__pycache__
+.vscode
+
+# WinMerge
+*.bak
