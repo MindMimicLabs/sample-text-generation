@@ -1,8 +1,8 @@
 
 make_samples <- function(tokens, sample_length) {
-  samples <- vector(mode = 'list', length = length(tokens) - sample_length)
-  for(j in 1:length(samples)) {
-    samples[[j]] <- tokens[j:(j + sample_length - 1)]
+  samples <- array(dim = c(length(tokens) - sample_length + 1, sample_length))
+  for(i in 1:(dim(samples)[1])) {
+    samples[i, ] <- tokens[i:(i + sample_length - 1)]
   }
   samples
 }
