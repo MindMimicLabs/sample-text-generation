@@ -3,7 +3,7 @@ require(yaml)
 
 create_dnn <- function(max_sentence_length, unique_vocab) {
     
-  FLAGS <- yaml.load_file('dnn_model.yml')
+  FLAGS <- yaml.load_file('./dnn_model.yml')
   
   model <-
     keras_model_sequential() %>% 

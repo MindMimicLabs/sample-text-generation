@@ -12,7 +12,7 @@ def create_dnn(max_sentence_length: int, unique_vocab: int) -> tf.keras.Sequenti
 
     model = tf.keras.Sequential([
         tf.keras.layers.LSTM(
-            units = FLAGS['units_lstm'],
+            units = FLAGS['units'],
             input_shape = (max_sentence_length, unique_vocab),
             kernel_initializer = "VarianceScaling",
             kernel_regularizer = tf.keras.regularizers.L1L2(l1 = FLAGS['reg'], l2 = FLAGS['reg'])),
