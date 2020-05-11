@@ -18,6 +18,9 @@ Any configuration differences have been extracted into a `.yml` file of the same
   In a _real_ setting the network would have more layers.
   Unfortunately, hyper-tuning a multi-layer network is as much _art_ as science.
   To keep this example on-point, the simplest version was chosen.
+* `~/code/load_corpus.{r|py}` supports loading a multi-document corpus.
+  Please note: these functions are identical in internet, but the low-level tokenization is _slightly_ different.
+  I will work out the delta when I get more time, but the difference is minor enough to still be fit for purpose.
 
 ## Environment
 
