@@ -11,10 +11,10 @@ The goal of this repository is to demonstrate simple techniques in both R and Py
 The scripts below are available for both R and Python.
 The names of the files will be identical except for the extension, either `.r` or `.py`.
 The code is broken up into different files to help highlight the language differences while maintaining the structural elements of the process.
-Any configuration differences have been extracted into a `.yml` file of the same name.
 
-* `~/code/dnn_model.{r|py}` defines the deep learning model.
-  In this case it is a single `LSTM` followed by a `Dense`.
+* `~/code/create_model.py` creates the model and saves it to disk.
+  This allows us to decouple the creation, training, and prediction aspects.
+  In this sample we have chosen to create a simple process: a single `LSTM` followed by a `Dense`.
   In a _real_ setting the network would have more layers.
   Unfortunately, hyper-tuning a multi-layer network is as much _art_ as science.
   To keep this example on-point, the simplest version was chosen.

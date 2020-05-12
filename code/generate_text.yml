@@ -1,4 +1,0 @@
-max_sentence_length: 10
-steps: 1
-batch_size: 200
-epochs: 10
