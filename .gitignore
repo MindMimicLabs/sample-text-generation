@@ -6,7 +6,9 @@
 __pycache__
 .vscode
 
+# Temporaty storage
 model
+data/*.npy
 
 # WinMerge
 *.bak
