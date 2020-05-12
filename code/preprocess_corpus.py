@@ -1,12 +1,13 @@
 import pathlib
-import string
 import numpy as np
 import progressbar as pb
+import string as s
+import utils as u
 from typeguard import typechecked
 
 # get the real path to the corpus based on the relative one
-corpus_path = pathlib.Path(__file__).parent.joinpath('../data').resolve()
-corpus_path_i = 0
+data_path = u.get_data_path()
+data_path_i = 0
 
 # collect all the unique tokens
 # EOS stands for 'End of Sequence' and is added in dynamically to the vectorized data
@@ -32,7 +33,7 @@ def tokenize_lines(lines: list) -> list:
 def tokenize_line(line: str) -> list:
     tokens = line.strip().split()
     tokens = [token.strip().lower() for token in tokens]
-    tokens = [token for token in tokens if token != '' and token not in string.punctuation]
+    tokens = [token for token in tokens if token != '' and token not in s.punctuation]
     if len(tokens) == 0:
         return None
     tokens.append(EOS)
@@ -41,10 +42,10 @@ def tokenize_line(line: str) -> list:
 # we perform this process in two passes: one to collect all the tokens from the _entire_ corpus and another to vectorise each document
 widgets = ['Counting: File# ', pb.Counter(), ' ', pb.BouncingBar(marker = '.', left = '[', right = ']'), ' ', pb.Timer()]
 with pb.ProgressBar(widgets = widgets) as bar:
-    for file in corpus_path.iterdir():
+    for file in data_path.iterdir():
         if file.suffix == '.txt':
-            corpus_path_i = corpus_path_i + 1
-            bar.update(corpus_path_i)
+            data_path_i = data_path_i + 1
+            bar.update(data_path_i)
             tokens = tokenize_document(file)
             for token in tokens:
                 if token not in unique_tokens:
@@ -52,13 +53,13 @@ with pb.ProgressBar(widgets = widgets) as bar:
                     unique_tokens_i = unique_tokens_i + 1
 
 # save the unique tokens
-np.save(corpus_path.joinpath('./_unique_tokens.npy'), unique_tokens)
+np.save(data_path.joinpath('./_unique_tokens.npy'), unique_tokens)
 
 # vectorise each file
 vectorise_i = 0
 widgets = ['Vectorising: File# ', pb.Counter(), ' ', pb.Bar(marker = '.', left = '[', right = ']'), ' ', pb.Percentage(), ' ', pb.ETA() ]
-with pb.ProgressBar(widgets = widgets, max_value = corpus_path_i) as bar:
-    for file in corpus_path.iterdir():
+with pb.ProgressBar(widgets = widgets, max_value = data_path_i) as bar:
+    for file in data_path.iterdir():
         if file.suffix == '.txt':
             vectorise_i = vectorise_i + 1
             bar.update(vectorise_i)
@@ -66,7 +67,7 @@ with pb.ProgressBar(widgets = widgets, max_value = corpus_path_i) as bar:
             document_v = np.empty(len(tokens), dtype = int)
             for i in range(0, len(tokens)):
                 document_v[i] = unique_tokens[tokens[i]]            
-            np.save(corpus_path.joinpath(f'{file.stem}.npy'), document_v)            
+            np.save(data_path.joinpath(f'{file.stem}.npy'), document_v)            
 
 print(f'unique tokens: {unique_tokens_i}')
-print(f'corpus documents: {corpus_path_i}')
+print(f'corpus documents: {data_path_i}')

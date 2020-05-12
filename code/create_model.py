@@ -1,13 +1,13 @@
+import numpy as np
 import utils as u
 import tensorflow as tf
 
 # Get configuration information --------------------------------------------------
-token_count = u.count_total_tokens('../data')
+config = u.load_config()['create']
+data_path = u.get_data_path()
+token_count = len(np.load(data_path.joinpath('./_unique_tokens.npy'), allow_pickle = True).item())
 
 # Make the model -----------------------------------------------------------------
-config = u.load_config('./text_generation.yml')
-config = config['create']
-
 # the `+1` is to allow for EOS to be added in later
 model = tf.keras.Sequential([
     tf.keras.layers.LSTM(
@@ -23,5 +23,5 @@ model.compile(
     loss = 'categorical_crossentropy')
 
 # Save the model -----------------------------------------------------------------
-model.save('./model/current.py.model')
+model.save(data_path.joinpath('./current.py.model'))
 model.summary()

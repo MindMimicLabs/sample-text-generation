@@ -1,3 +1,6 @@
+import pathlib
+import string
+import yaml
 import numpy as np
 from collections import namedtuple
 from typeguard import typechecked
@@ -32,3 +35,34 @@ def one_hot_batch(batch: xy_data, unique_tokens: dict) -> np.array:
     for i in range(0, len(batch.y)):
         one_hot_y[i, unique_tokens[batch.y[i]]] = True
     return xy_data(one_hot_x, one_hot_y)
+
+@typechecked
+def one_hot_single(sample: list, unique_tokens: dict) -> np.array:
+    one_hot = np.zeros([1, len(sample), len(unique_tokens)], dtype = 'float32')
+    for i in range(0, len(sample)):
+        one_hot[0, i, unique_tokens[sample[i]]] = True
+    return one_hot
+
+@typechecked
+def un_one_hot(sample: np.array, int_to_word: dict) -> list:
+    resut = []
+    for i in range(0, sample.shape[0]):
+        indx = np.argmax(sample[i])
+        resut.append(int_to_word[indx])
+    return resut
+
+@typechecked
+def load_config() -> dict:
+    config_path = _resolve_relitive_path('./text_generation.yml')
+    with open(config_path) as file:
+        return yaml.load(file, Loader = yaml.SafeLoader)
+
+@typechecked
+def get_data_path() -> pathlib.Path:
+    data_path = _resolve_relitive_path('../data')
+    return data_path
+
+@typechecked
+def _resolve_relitive_path(relitive_path: str) -> pathlib.Path:
+    relitive_path = pathlib.Path(__file__).parent.joinpath(relitive_path).resolve()
+    return relitive_path
