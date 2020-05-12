@@ -8,9 +8,8 @@ from typeguard import typechecked
 xy_data = namedtuple('xy_data', 'x, y')
 
 @typechecked
-def make_samples(tokens: list, sample_length: int) -> np.array:
-    max_word_length = max([len(x) for x in tokens])
-    samples = np.empty([len(tokens) - sample_length + 1, sample_length], dtype = f'<U{max_word_length}')
+def make_samples(tokens: np.array, sample_length: int) -> np.array:
+    samples = np.empty([len(tokens) - sample_length + 1, sample_length], dtype = int)
     for i in range(0, samples.shape[0]):
         for j in range(0, samples.shape[1]):
             samples[i,j] = tokens[i + j]
@@ -25,22 +24,22 @@ def make_batch(samples: np.array, start: int, batch_size: int) -> np.array:
     return xy_data(batch_x, batch_y)
 
 @typechecked
-def one_hot_batch(batch: xy_data, unique_tokens: dict) -> np.array:
+def one_hot_batch(batch: xy_data, unique_token_count: int) -> np.array:
     sz = batch.x.shape
-    one_hot_x = np.zeros([sz[0], sz[1], len(unique_tokens)], dtype = 'float32')
-    one_hot_y = np.zeros([len(batch.y), len(unique_tokens)], dtype = 'float32')
+    one_hot_x = np.zeros([sz[0], sz[1], unique_token_count], dtype = 'float32')
+    one_hot_y = np.zeros([len(batch.y), unique_token_count], dtype = 'float32')
     for i in range(0, sz[0]):
         for j in range(0, sz[1]):
-            one_hot_x[i, j, unique_tokens[batch.x[i, j]]] = True
+            one_hot_x[i, j, batch.x[i, j]] = True
     for i in range(0, len(batch.y)):
-        one_hot_y[i, unique_tokens[batch.y[i]]] = True
+        one_hot_y[i, batch.y[i]] = True
     return xy_data(one_hot_x, one_hot_y)
 
 @typechecked
-def one_hot_single(sample: list, unique_tokens: dict) -> np.array:
-    one_hot = np.zeros([1, len(sample), len(unique_tokens)], dtype = 'float32')
+def one_hot_single(sample: list, unique_token_count: int) -> np.array:
+    one_hot = np.zeros([1, len(sample), unique_token_count], dtype = 'float32')
     for i in range(0, len(sample)):
-        one_hot[0, i, unique_tokens[sample[i]]] = True
+        one_hot[0, i, sample[i]] = True
     return one_hot
 
 @typechecked
