@@ -54,6 +54,7 @@ with pb.ProgressBar(widgets = widgets) as bar:
 
 # save the unique tokens
 np.save(data_path.joinpath('./_unique_tokens.npy'), unique_tokens)
+np.save(data_path.joinpath('./_unique_tokens_count.npy'), len(unique_tokens))
 
 # vectorise each file
 vectorise_i = 0

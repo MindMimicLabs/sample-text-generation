@@ -5,7 +5,7 @@ import tensorflow as tf
 # Get configuration information --------------------------------------------------
 config = u.load_config()['create']
 data_path = u.get_data_path()
-token_count = len(np.load(data_path.joinpath('./_unique_tokens.npy'), allow_pickle = True).item())
+token_count = np.load(data_path.joinpath('./_unique_tokens_count.npy')).item()
 
 # Make the model -----------------------------------------------------------------
 # the `+1` is to allow for EOS to be added in later
