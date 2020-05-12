@@ -2,6 +2,8 @@ import pathlib
 import string
 from typeguard import typechecked
 
+EOS = 'EOS'
+
 class corpus:
     @typechecked
     def __init__(self, documents:list, vocab:dict, max_sentence_length:int) -> None:
@@ -26,7 +28,7 @@ def load_corpus(corpus_path: str) -> corpus:
         lines = [line.split() for line in lines if line != '']
         lines = [[word.lower() for word in line if word not in string.punctuation] for line in lines]
         # EOS marks the end of a sentence for when we flatten the list later
-        for line in lines: line.append('EOS')
+        for line in lines: line.append(EOS)
         t1 = max([len(line) for line in lines])
         max_sentence_length = max(max_sentence_length, t1)
         words_in_document = [x for y in lines for x in y]

@@ -2,6 +2,8 @@ require(dplyr)
 require(readtext)
 require(tokenizers)
 
+EOS = 'EOS'
+
 load_corpus <- function(corpus_path) {
 
   # load the documents
@@ -23,7 +25,7 @@ load_corpus <- function(corpus_path) {
     words_in_document <- vector(mode = 'list', length = length(lines))
     for(j in 1:length(lines)) {
       #  EOS marks the end of a sentence for when we flatten the list later
-      words_in_document[[j]] <- c(lines[j] %>% tokenize_words(simplify = T), 'EOS')
+      words_in_document[[j]] <- c(lines[j] %>% tokenize_words(simplify = T), EOS)
     }
     t1 <- max(sapply(words_in_document, length))
     max_sentence_length <- max(max_sentence_length, t1)
