@@ -67,8 +67,8 @@ with pb.ProgressBar(widgets = widgets, max_value = data_path_i) as bar:
             tokens = tokenize_document(file)
             document_v = np.empty(len(tokens), dtype = int)
             for i in range(0, len(tokens)):
-                document_v[i] = unique_tokens[tokens[i]]            
-            np.save(data_path.joinpath(f'{file.stem}.npy'), document_v)            
+                document_v[i] = unique_tokens[tokens[i]]
+            np.save(data_path.joinpath(f'{file.stem}.npy'), document_v)
 
 print(f'unique tokens: {unique_tokens_i}')
 print(f'corpus documents: {data_path_i}')
