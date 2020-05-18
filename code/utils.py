@@ -1,11 +1,34 @@
 import pathlib
-import string
+import string as s
 import yaml
 import numpy as np
 from collections import namedtuple
 from typeguard import typechecked
 
 xy_data = namedtuple('xy_data', 'x, y')
+
+@typechecked
+def tokenize_document(path: pathlib.Path) -> list:
+    with open(path, encoding = 'utf8') as document:
+        lines = document.readlines()
+    lines = tokenize_lines(lines)
+    tokens = [x for y in lines for x in y]
+    return tokens
+
+@typechecked
+def tokenize_lines(lines: list) -> list:
+    lines = [tokenize_line(line) for line in lines]
+    lines = [line for line in lines if line != None]
+    return lines
+
+@typechecked
+def tokenize_line(line: str) -> list:
+    tokens = line.strip().split()
+    tokens = [token.strip().lower() for token in tokens]
+    tokens = [token for token in tokens if token != '' and token not in s.punctuation]
+    if len(tokens) == 0:
+        return None
+    return tokens
 
 @typechecked
 def make_samples(tokens: np.array, sample_length: int) -> np.array:
@@ -43,11 +66,11 @@ def one_hot_single(sample: list, unique_token_count: int) -> np.array:
     return one_hot
 
 @typechecked
-def un_one_hot(sample: np.array, int_to_word: dict) -> list:
+def un_one_hot(sample: np.array) -> list:
     resut = []
     for i in range(0, sample.shape[0]):
         indx = np.argmax(sample[i])
-        resut.append(int_to_word[indx])
+        resut.append(indx)
     return resut
 
 @typechecked
@@ -65,3 +88,23 @@ def get_data_path() -> pathlib.Path:
 def _resolve_relitive_path(relitive_path: str) -> pathlib.Path:
     relitive_path = pathlib.Path(__file__).parent.joinpath(relitive_path).resolve()
     return relitive_path
+
+@typechecked
+def vectorize(tokens: list, token_to_int: dict) -> np.array:
+    vector = np.zeros(len(tokens), dtype = int)
+    for i in range(0, len(tokens)):
+        vector[i] = token_to_int[tokens[i]]
+    return vector
+
+@typechecked
+def unvectorize(vector: np.array, int_to_token: dict) -> list:
+    tokens = [int_to_token[x] for x in vector]
+    return tokens
+    
+@typechecked
+def vec_to_str(vector: np.array, int_to_token: dict) -> str:
+    tokens = unvectorize(vector, int_to_token)
+    t_str = ' '.join(str(x) for x in tokens)
+    v_str = ' '.join(str(x) for x in vector)
+    result = f'{t_str} ({v_str})'
+    return result

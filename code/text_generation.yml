@@ -7,5 +7,5 @@ train:
     batch_size: 128
     epochs: 30
 predict:
-    sequences_to_generate: 10
+    tokens_to_generate: 100
 
