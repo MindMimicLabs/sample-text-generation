@@ -1,7 +1,8 @@
 import pathlib
-import string as s
 import yaml
+import math as m
 import numpy as np
+import string as s
 from collections import namedtuple
 from typeguard import typechecked
 
@@ -66,12 +67,15 @@ def one_hot_single(sample: list, unique_token_count: int) -> np.array:
     return one_hot
 
 @typechecked
-def un_one_hot(sample: np.array) -> list:
-    resut = []
-    for i in range(0, sample.shape[0]):
-        indx = np.argmax(sample[i])
-        resut.append(indx)
-    return resut
+def un_one_hot(one_hot: np.array, temperature: float = 1) -> np.array:
+    weights = one_hot.copy().flatten()
+    for i in range(0, weights.shape[0]):
+        weights[i] = m.exp(m.log(weights[i])/temperature)
+    s = np.sum(weights)
+    for i in range(0, weights.shape[0]):
+        weights[i] = weights[i]/s
+    result = np.random.choice(weights.shape[0], p = weights)
+    return result
 
 @typechecked
 def load_config() -> dict:
