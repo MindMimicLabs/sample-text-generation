@@ -1,3 +1,4 @@
+import create_model as cm
 import random as r
 import numpy as np
 import tensorflow as tf
@@ -10,10 +11,11 @@ token_to_int = np.load(data_path.joinpath('./_token_to_int.npy'), allow_pickle =
 token_count = len(token_to_int)
 sequence_length = config['create']['sequence_length']
 tokens_to_generate = config['predict']['tokens_to_generate']
+model_path = str(u.get_model_path())
 
-# Load the model -----------------------------------------------------------------
-model = tf.keras.models.load_model(data_path.joinpath('./current.py.model'))
-model.summary()
+# Load the model weights ---------------------------------------------------------
+model = cm.create_model()
+model.load_weights(model_path)
 
 # Setup `dict` to un-vectorize ---------------------------------------------------
 int_to_token = dict((x[1], x[0]) for x in token_to_int.items())

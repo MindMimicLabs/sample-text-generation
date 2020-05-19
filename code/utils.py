@@ -80,6 +80,11 @@ def load_config() -> dict:
         return yaml.load(file, Loader = yaml.SafeLoader)
 
 @typechecked
+def get_model_path() -> pathlib.Path:
+    model_path = get_data_path().joinpath('./model.weights/weights')
+    return model_path        
+
+@typechecked
 def get_data_path() -> pathlib.Path:
     data_path = _resolve_relitive_path('../data')
     return data_path

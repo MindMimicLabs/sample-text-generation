@@ -1,3 +1,4 @@
+import create_model as cm
 import math as m
 import numpy as np
 import progressbar as pb
@@ -8,10 +9,11 @@ import utils as u
 config = u.load_config()
 data_path = u.get_data_path()
 token_count = len(np.load(data_path.joinpath('./_token_to_int.npy'), allow_pickle = True).item())
+model_path = str(u.get_model_path())
 
-# Load the model -----------------------------------------------------------------
-model = tf.keras.models.load_model(data_path.joinpath('./current.py.model'))
-model.summary()
+# Load the model weights ---------------------------------------------------------
+model = cm.create_model()
+model.load_weights(model_path)
 
 # Training -----------------------------------------------------------------------
 for epoch_i in range(1, config['train']['epochs'] + 1):
@@ -38,5 +40,5 @@ for epoch_i in range(1, config['train']['epochs'] + 1):
                     batch_i = batch_i + config['train']['batch_size']
     print(f'Epoch: {epoch_i}, Loss: {loss}')
 
-# Save the model -----------------------------------------------------------------
-model.save(data_path.joinpath('./current.py.model'))
+# Save the model weights ---------------------------------------------------------
+model.save_weights(model_path)
